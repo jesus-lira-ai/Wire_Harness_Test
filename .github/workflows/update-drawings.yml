@@ -1,0 +1,37 @@
+name: Auto-Generate Drawings List
+
+on:
+  push:
+    paths:
+      - 'drawings/**'
+  workflow_dispatch:
+
+jobs:
+  update-drawings-json:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install PyPDF2
+
+      - name: Generate drawings.json
+        run: |
+          python scripts/generate-drawings-json.py
+
+      - name: Commit and push if changed
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add drawings.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update drawings.json from PDFs" && git push)
