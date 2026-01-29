@@ -85,6 +85,12 @@
                 drawings.forEach(drawing => {
                     const statusBadge = getStatusBadge(drawing.status);
                     
+                    // Build history button if previous revisions exist
+                    let historyButton = '';
+                    if (drawing.previousRevisions && drawing.previousRevisions.length > 0) {
+                        historyButton = `<button class="btn btn-history" onclick="toggleHistory('${drawing.partNumber}')">📋 History (${drawing.previousRevisions.length})</button>`;
+                    }
+                    
                     const row = `
                         <tr>
                             <td class="part-number">${drawing.partNumber}</td>
@@ -96,10 +102,45 @@
                             <td class="actions">
                                 <a href="drawings/${drawing.filename}" class="btn btn-download" download>📄 Download</a>
                                 <a href="form.html?part=${drawing.partNumber}&rev=${drawing.revision}" class="btn btn-question">❓ Ask Question</a>
+                                ${historyButton}
                             </td>
                         </tr>
                     `;
                     tbody.innerHTML += row;
+                    
+                    // Add hidden history row if previous revisions exist
+                    if (drawing.previousRevisions && drawing.previousRevisions.length > 0) {
+                        const historyRow = `
+                            <tr id="history-${drawing.partNumber}" class="history-row" style="display: none;">
+                                <td colspan="7">
+                                    <div class="history-container">
+                                        <h4>📋 Previous Revisions for ${drawing.partNumber}</h4>
+                                        <table class="history-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>Revision</th>
+                                                    <th>Date</th>
+                                                    <th>Download</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                ${drawing.previousRevisions.map(prev => `
+                                                    <tr>
+                                                        <td class="revision">${prev.revision}</td>
+                                                        <td>${prev.dateUpdated}</td>
+                                                        <td>
+                                                            <a href="drawings/${prev.filename}" class="btn btn-download-small" download>📄 Download</a>
+                                                        </td>
+                                                    </tr>
+                                                `).join('')}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                        tbody.innerHTML += historyRow;
+                    }
                 });
             } catch (error) {
                 console.error('Error loading drawings:', error);
@@ -122,6 +163,15 @@
                 'Obsolete': { class: 'badge-hold', text: '❌ Obsolete' }
             };
             return statusMap[status] || statusMap['Released'];
+        }
+
+        function toggleHistory(partNumber) {
+            const historyRow = document.getElementById(`history-${partNumber}`);
+            if (historyRow.style.display === 'none') {
+                historyRow.style.display = 'table-row';
+            } else {
+                historyRow.style.display = 'none';
+            }
         }
 
         // Load drawings when page loads
