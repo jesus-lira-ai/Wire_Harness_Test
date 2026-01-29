@@ -113,7 +113,8 @@ def generate_drawings_json():
         print("No PDF files found in drawings/ folder")
         return
     
-    drawings = []
+    # Dictionary to group ALL revisions by part number
+    drawings_by_part = {}
     
     for pdf_file in pdf_files:
         filename = pdf_file.name
@@ -140,19 +141,57 @@ def generate_drawings_json():
             "description": description,
             "revision": revision,
             "dateUpdated": date_updated,
-            "pages": 7,  # Default for your harness drawings
+            "pages": 7,
             "status": "Released",
-            "filename": filename
+            "filename": filename,
+            "modTime": os.path.getmtime(pdf_file)
         }
         
-        drawings.append(drawing)
+        # Group ALL revisions by part number
+        if part_number not in drawings_by_part:
+            drawings_by_part[part_number] = []
+        
+        drawings_by_part[part_number].append(drawing)
         print(f"  ✓ {part_number} Rev {revision}")
+    
+    # Process each part number: latest + history
+    drawings = []
+    for part_number in sorted(drawings_by_part.keys()):
+        all_revisions = drawings_by_part[part_number]
+        
+        # Sort by modification time (newest first)
+        all_revisions.sort(key=lambda x: x['modTime'], reverse=True)
+        
+        # Latest revision (first after sorting)
+        latest = all_revisions[0].copy()
+        del latest['modTime']
+        
+        # Previous revisions (rest of the list)
+        previous = []
+        for rev in all_revisions[1:]:
+            prev_entry = {
+                "revision": rev['revision'],
+                "dateUpdated": rev['dateUpdated'],
+                "filename": rev['filename']
+            }
+            previous.append(prev_entry)
+        
+        # Add previous revisions to latest entry
+        if previous:
+            latest['previousRevisions'] = previous
+            print(f"  → {part_number}: Latest=Rev {latest['revision']}, History={len(previous)} revisions")
+        
+        drawings.append(latest)
     
     # Write to drawings.json
     with open('drawings.json', 'w') as f:
         json.dump(drawings, f, indent=2)
     
     print(f"\n✅ Generated drawings.json with {len(drawings)} drawings!")
+    print(f"   Total PDFs processed: {len(pdf_files)}")
+    print(f"   Unique part numbers: {len(drawings)}")
+    total_history = sum(len(d.get('previousRevisions', [])) for d in drawings)
+    print(f"   Previous revisions tracked: {total_history}")
 
 
 if __name__ == '__main__':
