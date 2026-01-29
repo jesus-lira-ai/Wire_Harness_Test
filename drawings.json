@@ -11,11 +11,18 @@
   {
     "partNumber": "04-210-3138",
     "description": "HARNESS, AT360, RIGHT, FWD, ROOF, ISUZU, GEN2",
-    "revision": "A2",
+    "revision": "A3",
     "dateUpdated": "21/28/2026",
     "pages": 7,
     "status": "Released",
-    "filename": "04-210-3138.A2.pdf"
+    "filename": "04-210-3138.A3.pdf",
+    "previousRevisions": [
+      {
+        "revision": "A2",
+        "dateUpdated": "21/28/2026",
+        "filename": "04-210-3138.A2.pdf"
+      }
+    ]
   },
   {
     "partNumber": "04-210-3162",
