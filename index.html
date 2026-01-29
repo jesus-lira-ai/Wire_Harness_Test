@@ -43,44 +43,13 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="drawingTableBody">
                 <tr>
-                    <td class="part-number">04-210-2961</td>
-                    <td>PDM GND Bus Bar - Relay to PWR BUS Main COMP</td>
-                    <td class="revision">A</td>
-                    <td>08/24/2025</td>
-                    <td>7</td>
-                    <td><span class="badge badge-released">✅ Released</span></td>
-                    <td class="actions">
-                        <a href="drawings/04-210-2961.A.pdf" class="btn btn-download" download>📄 Download</a>
-                        <a href="form.html?part=04-210-2961&rev=A" class="btn btn-question">❓ Ask Question</a>
+                    <td colspan="7" style="text-align: center; padding: 40px;">
+                        <div style="font-size: 2em;">⏳</div>
+                        <p>Loading drawings...</p>
                     </td>
                 </tr>
-                <tr>
-                    <td class="part-number">04-210-3162</td>
-                    <td>Harness, System 1, GND Bus Bar 3, Power, Rack, Isuzu, Gen2</td>
-                    <td class="revision">A1</td>
-                    <td>12/04/2025</td>
-                    <td>7</td>
-                    <td><span class="badge badge-released">✅ Released</span></td>
-                    <td class="actions">
-                        <a href="drawings/04-210-3162.A1.pdf" class="btn btn-download" download>📄 Download</a>
-                        <a href="form.html?part=04-210-3162&rev=A1" class="btn btn-question">❓ Ask Question</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="part-number">04-210-3559</td>
-                    <td>Harness, LED ADK, Pigtail, Gen2</td>
-                    <td class="revision">A1</td>
-                    <td>11/10/2025</td>
-                    <td>7</td>
-                    <td><span class="badge badge-released">✅ Released</span></td>
-                    <td class="actions">
-                        <a href="drawings/04-210-3559.A1.pdf" class="btn btn-download" download>📄 Download</a>
-                        <a href="form.html?part=04-210-3559&rev=A1" class="btn btn-question">❓ Ask Question</a>
-                    </td>
-                </tr>
-                <!-- Add more rows as needed -->
             </tbody>
         </table>
 
@@ -103,6 +72,60 @@
     <script>
         // Display last update time
         document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString();
+
+        // Load drawings from JSON file
+        async function loadDrawings() {
+            try {
+                const response = await fetch('drawings.json');
+                const drawings = await response.json();
+                
+                const tbody = document.getElementById('drawingTableBody');
+                tbody.innerHTML = ''; // Clear loading message
+                
+                drawings.forEach(drawing => {
+                    const statusBadge = getStatusBadge(drawing.status);
+                    
+                    const row = `
+                        <tr>
+                            <td class="part-number">${drawing.partNumber}</td>
+                            <td>${drawing.description}</td>
+                            <td class="revision">${drawing.revision}</td>
+                            <td>${drawing.dateUpdated}</td>
+                            <td>${drawing.pages}</td>
+                            <td><span class="badge ${statusBadge.class}">${statusBadge.text}</span></td>
+                            <td class="actions">
+                                <a href="drawings/${drawing.filename}" class="btn btn-download" download>📄 Download</a>
+                                <a href="form.html?part=${drawing.partNumber}&rev=${drawing.revision}" class="btn btn-question">❓ Ask Question</a>
+                            </td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            } catch (error) {
+                console.error('Error loading drawings:', error);
+                document.getElementById('drawingTableBody').innerHTML = `
+                    <tr>
+                        <td colspan="7" style="text-align: center; padding: 40px; color: #e74c3c;">
+                            <div style="font-size: 2em;">⚠️</div>
+                            <p>Error loading drawings. Please refresh the page.</p>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        function getStatusBadge(status) {
+            const statusMap = {
+                'Released': { class: 'badge-released', text: '✅ Released' },
+                'In Revision': { class: 'badge-revision', text: '🛠️ In Revision' },
+                'On Hold': { class: 'badge-hold', text: '⚠️ On Hold' },
+                'Obsolete': { class: 'badge-hold', text: '❌ Obsolete' }
+            };
+            return statusMap[status] || statusMap['Released'];
+        }
+
+        // Load drawings when page loads
+        window.addEventListener('DOMContentLoaded', loadDrawings);
 
         // Search function
         function searchDrawings() {
