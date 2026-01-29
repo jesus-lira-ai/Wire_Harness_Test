@@ -1,27 +1,27 @@
 [
   {
     "partNumber": "04-210-2961",
-    "description": "PDM GND Bus Bar - Relay to PWR BUS Main COMP",
+    "description": "Harness Drawing 04-210-2961",
     "revision": "A1",
-    "dateUpdated": "08/24/2025",
+    "dateUpdated": "01/29/2026",
     "pages": 7,
     "status": "Released",
     "filename": "04-210-2961.A1.pdf"
   },
   {
     "partNumber": "04-210-3162",
-    "description": "Harness, System 1, GND Bus Bar 3, Power, Rack, Isuzu, Gen2",
+    "description": "HARNESS, SYSTEM 1, GND BUS BAR 3, POWER, RACK, ISUZU, GEN2",
     "revision": "A1",
-    "dateUpdated": "12/04/2025",
+    "dateUpdated": "01/29/2026",
     "pages": 7,
     "status": "Released",
     "filename": "04-210-3162.A1.pdf"
   },
   {
     "partNumber": "04-210-3559",
-    "description": "Harness, LED ADK, Pigtail, Gen2",
+    "description": "HARNESS, LED ADK, PIGTAIL, GEN2Z.Zhu",
     "revision": "A1",
-    "dateUpdated": "11/10/2025",
+    "dateUpdated": "01/29/2026",
     "pages": 7,
     "status": "Released",
     "filename": "04-210-3559.A1.pdf"
