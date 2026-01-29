@@ -220,6 +220,70 @@ header h1 {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
+.btn-history {
+    background: #f39c12;
+    color: white;
+}
+
+.btn-history:hover {
+    background: #e67e22;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.btn-download-small {
+    background: #3498db;
+    color: white;
+    padding: 6px 12px;
+    font-size: 0.85em;
+}
+
+.btn-download-small:hover {
+    background: #2980b9;
+}
+
+/* History Row Styles */
+.history-row {
+    background: #f8f9fa !important;
+}
+
+.history-container {
+    padding: 20px;
+    background: white;
+    border: 2px solid #3498db;
+    border-radius: 8px;
+    margin: 10px;
+}
+
+.history-container h4 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.history-table th {
+    background: #ecf0f1;
+    padding: 10px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #bdc3c7;
+}
+
+.history-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.history-table tr:hover {
+    background: #f8f9fa;
+}
+
 /* Notes Section */
 .notes {
     background: #f8f9fa;
