@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harness Drawing Portal</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔧 Harness Drawing Portal</h1>
+            <p class="subtitle">Engineering Drawing Repository - Confidential</p>
+        </header>
+
+        <div class="info-banner">
+            <p><strong>⚠️ CONFIDENTIAL:</strong> These drawings contain proprietary information. Do not distribute without authorization.</p>
+        </div>
+
+        <div class="instructions">
+            <h2>How to Use This Portal</h2>
+            <ul>
+                <li><strong>View/Download:</strong> Click "Download Drawing" to get the 7-page PDF</li>
+                <li><strong>Check Revision:</strong> Always verify you have the correct revision before production</li>
+                <li><strong>Ask Questions:</strong> Use the "Ask Question" button for any clarifications</li>
+                <li><strong>Print List:</strong> Press Ctrl+P to print this page for your production floor</li>
+            </ul>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Search by part number or description..." onkeyup="searchDrawings()">
+        </div>
+
+        <table class="drawing-table" id="drawingTable">
+            <thead>
+                <tr>
+                    <th>Part Number</th>
+                    <th>Description</th>
+                    <th>Rev</th>
+                    <th>Date Updated</th>
+                    <th>Pages</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="part-number">04-210-2961</td>
+                    <td>PDM GND Bus Bar - Relay to PWR BUS Main COMP</td>
+                    <td class="revision">A</td>
+                    <td>08/24/2025</td>
+                    <td>7</td>
+                    <td><span class="badge badge-released">✅ Released</span></td>
+                    <td class="actions">
+                        <a href="drawings/04-210-2961.A.pdf" class="btn btn-download" download>📄 Download</a>
+                        <a href="form.html?part=04-210-2961&rev=A" class="btn btn-question">❓ Ask Question</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="part-number">04-210-3162</td>
+                    <td>Harness, System 1, GND Bus Bar 3, Power, Rack, Isuzu, Gen2</td>
+                    <td class="revision">A1</td>
+                    <td>12/04/2025</td>
+                    <td>7</td>
+                    <td><span class="badge badge-released">✅ Released</span></td>
+                    <td class="actions">
+                        <a href="drawings/04-210-3162.A1.pdf" class="btn btn-download" download>📄 Download</a>
+                        <a href="form.html?part=04-210-3162&rev=A1" class="btn btn-question">❓ Ask Question</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="part-number">04-210-3559</td>
+                    <td>Harness, LED ADK, Pigtail, Gen2</td>
+                    <td class="revision">A1</td>
+                    <td>11/10/2025</td>
+                    <td>7</td>
+                    <td><span class="badge badge-released">✅ Released</span></td>
+                    <td class="actions">
+                        <a href="drawings/04-210-3559.A1.pdf" class="btn btn-download" download>📄 Download</a>
+                        <a href="form.html?part=04-210-3559&rev=A1" class="btn btn-question">❓ Ask Question</a>
+                    </td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+
+        <div class="notes">
+            <h3>📋 Important Notes:</h3>
+            <ul>
+                <li>Each drawing is 7 pages: Diagram, Revisions, Notes, BOM, Wiring Table, Cutlist, and Labels</li>
+                <li>Always check the revision letter before starting production</li>
+                <li>Questions are tracked and responded to within 2 business days</li>
+                <li>For urgent production issues, mark as URGENT in the question form</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>Last Updated: <span id="lastUpdate"></span></p>
+            <p>For technical support, contact: engineering@yourcompany.com</p>
+        </footer>
+    </div>
+
+    <script>
+        // Display last update time
+        document.getElementById('lastUpdate').textContent = new Date().toLocaleDateString();
+
+        // Search function
+        function searchDrawings() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('drawingTable');
+            const rows = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const text = row.textContent.toLowerCase();
+                
+                if (text.includes(filter)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
+
+        // Print-friendly: hide buttons when printing
+        window.addEventListener('beforeprint', function() {
+            document.querySelectorAll('.btn-question').forEach(btn => btn.style.display = 'none');
+        });
+        
+        window.addEventListener('afterprint', function() {
+            document.querySelectorAll('.btn-question').forEach(btn => btn.style.display = 'inline-block');
+        });
+    </script>
+</body>
+</html>

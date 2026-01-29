@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Question - Harness Portal</title>
+    <link rel="stylesheet" href="form-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>❓ Harness Drawing Inquiry</h1>
+            <p class="subtitle">Submit your questions about harness drawings</p>
+        </header>
+
+        <div class="form-container">
+            <form id="inquiryForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+                
+                <!-- Contact Information -->
+                <fieldset>
+                    <legend>📧 Contact Information</legend>
+                    
+                    <div class="form-group">
+                        <label for="name">Your Name *</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Your Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">Your Company *</label>
+                        <input type="text" id="company" name="company" required>
+                    </div>
+                </fieldset>
+
+                <!-- Drawing Information -->
+                <fieldset>
+                    <legend>📄 Drawing Information</legend>
+                    
+                    <div class="form-group">
+                        <label for="partNumber">Part Number *</label>
+                        <input type="text" id="partNumber" name="partNumber" required placeholder="04-210-XXXX">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="revision">Revision *</label>
+                        <input type="text" id="revision" name="revision" required placeholder="A, A1, B, etc.">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Which page(s) does this relate to?</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" name="pages" value="Page 1 - Diagram"> Page 1 - Harness Diagram</label>
+                            <label><input type="checkbox" name="pages" value="Page 2 - Revisions"> Page 2 - Revisions</label>
+                            <label><input type="checkbox" name="pages" value="Page 3 - Notes"> Page 3 - Notes</label>
+                            <label><input type="checkbox" name="pages" value="Page 4 - BOM"> Page 4 - Bill of Materials (BOM)</label>
+                            <label><input type="checkbox" name="pages" value="Page 5 - Wiring"> Page 5 - Wiring Table</label>
+                            <label><input type="checkbox" name="pages" value="Page 6 - Cutlist"> Page 6 - Cutlist</label>
+                            <label><input type="checkbox" name="pages" value="Page 7 - Labels"> Page 7 - Labels</label>
+                            <label><input type="checkbox" name="pages" value="General"> General/Multiple Pages</label>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Question Details -->
+                <fieldset>
+                    <legend>💬 Your Question</legend>
+                    
+                    <div class="form-group">
+                        <label for="category">Question Category *</label>
+                        <select id="category" name="category" required>
+                            <option value="">-- Select Category --</option>
+                            <option value="BOM/Parts">BOM/Parts Question - Need clarification on components</option>
+                            <option value="Wiring">Wiring Question - Wire colors, gauges, or connections unclear</option>
+                            <option value="Labels">Label Question - Label placement or text unclear</option>
+                            <option value="Missing Info">Missing Information - Something is not shown on drawing</option>
+                            <option value="Drawing Error">Drawing Error - Something appears incorrect</option>
+                            <option value="Manufacturing">Manufacturing Issue - Can't build as shown</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="question">Your Question or Issue *</label>
+                        <textarea id="question" name="question" rows="8" required placeholder="Be specific: reference wire numbers (W1, W2), connector IDs (C1), or BOM item numbers..."></textarea>
+                        <small>Please provide as much detail as possible to help us respond accurately.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="urgency">Does this stop production? *</label>
+                        <select id="urgency" name="urgency" required>
+                            <option value="">-- Select Urgency --</option>
+                            <option value="🔴 URGENT">🔴 URGENT - Production stopped, need answer ASAP</option>
+                            <option value="🟡 MEDIUM">🟡 MEDIUM - Can continue but need answer soon</option>
+                            <option value="🟢 LOW">🟢 LOW - Just a clarification for future builds</option>
+                        </select>
+                    </div>
+                </fieldset>
+
+                <!-- Hidden fields for tracking -->
+                <input type="hidden" name="_subject" value="New Harness Drawing Inquiry">
+                <input type="hidden" name="_next" value="thank-you.html">
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-submit">📤 Submit Question</button>
+                    <a href="index.html" class="btn btn-cancel">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="info-box">
+            <h3>📋 What happens next?</h3>
+            <ul>
+                <li>You'll receive an email confirmation</li>
+                <li>Our engineering team will review your question</li>
+                <li>We'll respond within 2 business days</li>
+                <li>Urgent issues are prioritized</li>
+            </ul>
+        </div>
+
+        <footer>
+            <p><a href="index.html">← Back to Drawing List</a></p>
+            <p>For urgent issues, contact: engineering@yourcompany.com</p>
+        </footer>
+    </div>
+
+    <script>
+        // Pre-fill form from URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const partNumber = urlParams.get('part');
+        const revision = urlParams.get('rev');
+
+        if (partNumber) {
+            document.getElementById('partNumber').value = partNumber;
+        }
+        if (revision) {
+            document.getElementById('revision').value = revision;
+        }
+
+        // Form validation
+        document.getElementById('inquiryForm').addEventListener('submit', function(e) {
+            const question = document.getElementById('question').value.trim();
+            
+            if (question.length < 20) {
+                e.preventDefault();
+                alert('Please provide more detail in your question (at least 20 characters).');
+                return false;
+            }
+        });
+    </script>
+</body>
+</html>
